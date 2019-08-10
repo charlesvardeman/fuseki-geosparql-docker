@@ -1,0 +1,180 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix geom: <http://example.org/Geometry#> .
+@prefix feat: <http://example.org/Feature#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ex: <http://example.org/Schema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sf: <http://www.opengis.net/ont/sf#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+feat:A
+    ex:hasExactGeometry geom:PointA ;
+    ex:name "PlaceA" ;
+    a ex:PlaceOfInterest .
+
+feat:B
+    ex:hasExactGeometry geom:PointB ;
+    ex:name "PlaceB" ;
+    a ex:PlaceOfInterest .
+
+feat:C
+    ex:hasExactGeometry geom:PointC ;
+    ex:name "PlaceC" ;
+    a ex:PlaceOfInterest .
+
+feat:C2
+    ex:hasExactGeometry geom:PointC2 ;
+    ex:name "PlaceC2" ;
+    a ex:PlaceOfInterest .
+
+feat:D
+    ex:hasExactGeometry geom:LineStringD ;
+    ex:name "PlaceD" ;
+    a ex:PlaceOfInterest .
+
+feat:E
+    ex:hasExactGeometry geom:LineStringE ;
+    ex:name "PlaceE" ;
+    a ex:PlaceOfInterest .
+
+feat:Empty
+    ex:hasExactGeometry geom:PointEmpty ;
+    ex:name "PlaceEmpty" ;
+    a ex:PlaceOfInterest .
+
+feat:F
+    ex:hasExactGeometry geom:LineStringF ;
+    ex:name "PlaceF" ;
+    a ex:PlaceOfInterest .
+
+feat:G
+    ex:hasExactGeometry geom:LineStringG ;
+    ex:name "PlaceG" ;
+    a ex:PlaceOfInterest .
+
+feat:H
+    ex:hasExactGeometry geom:PolygonH ;
+    ex:name "PlaceH" ;
+    a ex:PlaceOfInterest .
+
+feat:I
+    ex:hasExactGeometry geom:PolygonI ;
+    ex:name "PlaceI" ;
+    a ex:PlaceOfInterest .
+
+feat:J
+    ex:hasExactGeometry geom:PolygonJ ;
+    ex:name "PlaceJ" ;
+    a ex:PlaceOfInterest .
+
+feat:K
+    ex:hasExactGeometry geom:PolygonK ;
+    ex:name "PlaceK" ;
+    a ex:PlaceOfInterest .
+
+feat:L
+    ex:hasExactGeometry geom:PolygonL ;
+    ex:name "PlaceL" ;
+    a ex:PlaceOfInterest .
+
+feat:M
+    ex:hasExactGeometry geom:PointM ;
+    ex:name "PlaceM" ;
+    a ex:PlaceOfInterest .
+
+feat:X
+    geo:ehContains feat:Y ;
+    geo:ehCoveredBy feat:Y ;
+    geo:ehCovers feat:Y ;
+    geo:ehDisjoint feat:Y ;
+    geo:ehEquals feat:Y ;
+    geo:ehInside feat:Y ;
+    geo:ehMeet feat:Y ;
+    geo:ehOverlap feat:Y ;
+    geo:rcc8dc feat:Y ;
+    geo:rcc8ec feat:Y ;
+    geo:rcc8eq feat:Y ;
+    geo:rcc8ntpp feat:Y ;
+    geo:rcc8ntppi feat:Y ;
+    geo:rcc8po feat:Y ;
+    geo:rcc8tpp feat:Y ;
+    geo:rcc8tppi feat:Y ;
+    geo:sfContains feat:Y ;
+    geo:sfCrosses feat:Y ;
+    geo:sfDisjoint feat:Y ;
+    geo:sfEquals feat:Y ;
+    geo:sfIntersects feat:Y ;
+    geo:sfOverlaps feat:Y ;
+    geo:sfTouches feat:Y ;
+    geo:sfWithin feat:Y ;
+    a ex:PlaceOfInterest .
+
+geom:LineStringD
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(49.76728142390411 -7.5566583085839065, 49.76730801860234 -7.556105478012234"^^geo:wktLiteral ;
+    a sf:LineString .
+
+geom:LineStringE
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(49.7673942128462 -7.556184846427698, 49.767440747967356 -7.55521738936449"^^geo:wktLiteral ;
+    a sf:LineString .
+
+geom:LineStringF
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(49.7670376803898 -7.557047265728671, 49.76706427684918 -7.556494438294543"^^geo:wktLiteral ;
+    a sf:LineString .
+
+geom:LineStringG
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(49.7676213331572 -7.5561414037174925, 49.76712898169763 -7.556084949320357"^^geo:wktLiteral ;
+    a sf:LineString .
+
+geom:PointA
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(49.76738423998772 -7.556392158328029"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PointB
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(49.767404185335266 -7.555977534411771"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PointC
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(49.76700621977145 -7.556765719356096"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PointC2
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(49.76700621977145 -7.556765719356096"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PointEmpty
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT EMPTY"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PointM
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(49.76879702579324 -7.553218783718029"^^geo:wktLiteral ;
+    a sf:Point .
+
+geom:PolygonH
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.76718525647279 -7.55678625046624, 49.767453811502655 -7.556817047516802, 49.76749370380116 -7.555987798634042, 49.767225148394544 -7.555957006121356, 49.76718525647279 -7.55678625046624"^^geo:wktLiteral ;
+    a sf:Polygon .
+
+geom:PolygonI
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.76699470401132 -7.556069552936298, 49.76726325937726 -7.55610034582, 49.767303146435616 -7.555271099177621, 49.76703459069299 -7.555240310831772, 49.76699470401132 -7.556069552936298"^^geo:wktLiteral ;
+    a sf:Polygon .
+
+geom:PolygonJ
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.76703459069299 -7.555240310831772, 49.767303146435616 -7.555271099177621, 49.767343027582484 -7.5544418506860715, 49.76707447146322 -7.554411066878108, 49.76703459069299 -7.555240310831772"^^geo:wktLiteral ;
+    a sf:Polygon .
+
+geom:PolygonK
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.76718525647279 -7.55678625046624, 49.76725687115003 -7.556794462967842, 49.76726684470977 -7.556587151752493, 49.767195230007424 -7.556578939553413, 49.76718525647279 -7.55678625046624"^^geo:wktLiteral ;
+    a sf:Polygon .
+
+geom:PolygonL
+    geo:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.76717219220662 -7.555186601165656, 49.767261710796475 -7.555196863847232, 49.76727168149855 -7.55498955204825, 49.7671821628773 -7.5549792897448285, 49.76717219220662 -7.555186601165656"^^geo:wktLiteral ;
+    a sf:Polygon .
+
+ex:PlaceOfInterest
+    a rdfs:Class ;
+    rdfs:subClassOf geo:Feature .
+
+ex:hasExactGeometry
+    a rdf:Property ;
+    rdfs:subPropertyOf geo:hasDefaultGeometry, geo:hasGeometry .
+
