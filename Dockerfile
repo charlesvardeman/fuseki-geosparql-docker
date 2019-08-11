@@ -35,6 +35,7 @@ RUN set -x \
         dpkg \
         gnupg \
         openssl \
+        curl \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
     && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
     && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
@@ -75,6 +76,7 @@ RUN addgroup -S nonroot \
 VOLUME /data/fuseki/fuseki_DB
 ENV FUSEKI_BASE /data/fuseki
 COPY ./data/geosparql_test.rdf /jena-fuseki
+COPY ./docker-entrypoint.sh /jena-fuseki
 
 # setting environment variables for entrypoint script
 # setting also directories to be owned by the nonroot user
@@ -86,6 +88,6 @@ WORKDIR /jena-fuseki
 
 EXPOSE 3030
 
-#ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/jena-fuseki/docker-entrypoint.sh"]
 #CMD ["/jena-fuseki/bin/start-fuseki.sh"]
-ENTRYPOINT [ "/bin/bash" ]
+# ENTRYPOINT [ "/bin/sh" ]
