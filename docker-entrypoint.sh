@@ -13,6 +13,38 @@ else
     FNAME="geosparql_test.rdf>xml"
 fi
 
-echo $FNAME
+if [ -n "${INF}" ]; then
+    CMDOPTS+=" -i "
+fi
 
-java -jar jena-fuseki-geosparql-3.14.0-SNAPSHOT.jar -rf "${FNAME}" -i --loopback false
+if [ -n "${UPDATE}" ]; then
+    CMDOPTS+=" --update "
+fi
+
+if [ -n "${LOOPBACK}" ]; then
+    CMDOPTS+=" --loopback false "
+fi
+
+if [ -n "${DEFGEO}" ]; then
+    CMDOPTS+=" --default_geometry "
+fi
+
+if [ -n "${VALGEO}" ]; then
+    CMDOPTS+=" --validate "
+fi
+
+if [ -n "${REWRITE}" ]; then
+    CMDOPTS+=" --rewrite "
+fi
+
+if [ -n "${REMGEO}" ]; then
+    CMDOPTS+=" --remove_geo "
+fi
+
+if [ -n "${INDEX}" ]; then
+    CMDOPTS+=" --index "
+fi
+
+
+
+java -jar jena-fuseki-geosparql-3.14.0-SNAPSHOT.jar -rf "${FNAME}" ${CMDOPTS}
