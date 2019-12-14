@@ -1,41 +1,41 @@
-FROM java:8-jre-alpine
+# Build
+FROM openjdk:8-jdk-alpine as builder
+LABEL stage=builder
 
-MAINTAINER Charles F Vardeman II <cvardema@nd.edu>
+# ----
+# Install Maven
+RUN apk add --no-cache curl tar bash git
+ARG MAVEN_VERSION=3.6.3
+ARG USER_HOME_DIR="/root"
+RUN mkdir -p /usr/share/maven && \
+    curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzC /usr/share/maven --strip-components=1 && \
+    ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+# speed up Maven JVM a bit
+ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
-RUN apk add --update \
-    && apk add --no-cache pwgen linux-headers bash ca-certificates wget unzip\
-    && rm -rf /var/cache/apk/*
+RUN mkdir -p /usr/src && cd /usr/src
+RUN git clone https://github.com/apache/jena.git /usr/src/jena
+# WORKDIR /usr/src/jena
+RUN cd /usr/src/jena && mvn clean install -pl jena-fuseki2/jena-fuseki-geosparql -am
 
-# Update below according to https://jena.apache.org/download/
-ENV GEO_FUSEKI_SHA512 562daa37e4f28579a3dca2d5b0ddcfd55400e06aa17b805a32d12b5ceda1efe9f7de513d8eb0854e06cc0fe7dfa6b5b7e5b3bb07a9da931a06bf7dd2d70573d3
-ENV GEO_FUSEKI_VERSION 1.1.2
-ENV GEO_FUSEKI_DOWNLOAD https://github.com/galbiston/geosparql-fuseki/releases/download
-
+FROM openjdk:8-jdk-alpine
+LABEL maintainer="<https://orcid.org/0000-0003-4091-6059>"
 # Installation folder
 RUN mkdir /jena-fuseki
 ENV FUSEKI_HOME /jena-fuseki
-
-WORKDIR /tmp
-
-#https://github.com/galbiston/geosparql-fuseki/releases/download/v1.1.0/geosparql-fuseki-1.1.0.zip
-#https://github.com/galbiston/geosparql-fuseki/releases/download/v1.1.2/geosparql-fuseki-1.1.2.zip
-# md5 checksum
-RUN echo "$GEO_FUSEKI_SHA512  geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip" > geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip.sha512
-# Download/check/unpack/move in one go (to reduce image size)
-# && sha512sum -c geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip.sha512 \
-RUN wget ${GEO_FUSEKI_DOWNLOAD}/v${GEO_FUSEKI_VERSION}/geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip \
-    && sha512sum -c geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip.sha512 \
-    && unzip geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip \
-    && mv geosparql-fuseki-${GEO_FUSEKI_VERSION}/* $FUSEKI_HOME \
-    && rm geosparql-fuseki-${GEO_FUSEKI_VERSION}.zip 
+ENV FUSEKI_VERSION 3.14.0
+WORKDIR /jena-fuseki
+COPY --from=builder /usr/src/jena/jena-fuseki2/jena-fuseki-geosparql/target/jena-fuseki-geosparql-${FUSEKI_VERSION}-SNAPSHOT.jar /jena-fuseki
 
 ENV GOSU_VERSION 1.10
 RUN set -x \
     && apk add --no-cache --virtual .gosu-deps \
-        dpkg \
-        gnupg \
-        openssl \
-        curl \
+    dpkg \
+    gnupg \
+    openssl \
+    curl \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
     && wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" \
     && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" \
@@ -52,24 +52,6 @@ RUN set -x \
 RUN addgroup -S nonroot \
     && adduser -S -g nonroot nonroot
 
-# As "localhost" is often inaccessible within Docker container,
-# we'll enable basic-auth with a preset admin password
-# (which we'll generate on start-up)
-#COPY shiro.ini /jena-fuseki/shiro.ini
-#
-#COPY docker-entrypoint.sh /
-
-# Adding configuration to the Graph Store and associated data
-# at the same time modifing start script
-#ADD data /data/fuseki/config/data/
-#COPY config.ttl /data/fuseki/config/config.ttl
-#COPY start-fuseki.sh /jena-fuseki/start-fuseki.sh
-# Create volume for data store
-
-#COPY load.sh /jena-fuseki/
-#COPY tdbloader /jena-fuseki/
-#RUN chmod 755 /jena-fuseki/load.sh /jena-fuseki/tdbloader /jena-fuseki/start-fuseki.sh /docker-entrypoint.sh
-
 # Config and data volume
 # The volume needs to be set after the directory has been created to avoid
 # permissions issues
@@ -78,16 +60,7 @@ ENV FUSEKI_BASE /data/fuseki
 COPY ./data/geosparql_test.rdf /jena-fuseki
 COPY ./docker-entrypoint.sh /jena-fuseki
 
-# setting environment variables for entrypoint script
-# setting also directories to be owned by the nonroot user
-ENV GOSU_USER nonroot:nonroot
-ENV GOSU_CHOWN /jena-fuseki /data
-
-# Where we start our server from
-WORKDIR /jena-fuseki
-
 EXPOSE 3030
 
 ENTRYPOINT ["/jena-fuseki/docker-entrypoint.sh"]
-#CMD ["/jena-fuseki/bin/start-fuseki.sh"]
-# ENTRYPOINT [ "/bin/sh" ]
+#ENTRYPOINT ["/bin/sh"]
