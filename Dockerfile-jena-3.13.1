@@ -1,6 +1,7 @@
 # Build
 FROM openjdk:8-jdk-alpine as builder
 LABEL stage=builder
+ENV FUSEKI_VERSION 3.13.1
 
 # ----
 # Install Maven
@@ -18,16 +19,17 @@ ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 RUN mkdir -p /usr/src && cd /usr/src
 RUN git clone https://github.com/apache/jena.git /usr/src/jena
 # WORKDIR /usr/src/jena
-RUN cd /usr/src/jena && mvn clean install -pl jena-fuseki2/jena-fuseki-geosparql -am
+RUN cd /usr/src/jena && git checkout jena-${FUSEKI_VERSION} && mvn clean install -pl jena-fuseki2/jena-fuseki-geosparql -am
 
 FROM openjdk:8-jdk-alpine
 LABEL maintainer="<https://orcid.org/0000-0003-4091-6059>"
+ENV FUSEKI_VERSION 3.13.1
 # Installation folder
 RUN mkdir /jena-fuseki
 ENV FUSEKI_HOME /jena-fuseki
-ENV FUSEKI_VERSION 3.14.0
+
 WORKDIR /jena-fuseki
-COPY --from=builder /usr/src/jena/jena-fuseki2/jena-fuseki-geosparql/target/jena-fuseki-geosparql-${FUSEKI_VERSION}-SNAPSHOT.jar /jena-fuseki/jena-fuseki-geosparql.jar
+COPY --from=builder /usr/src/jena/jena-fuseki2/jena-fuseki-geosparql/target/jena-fuseki-geosparql-${FUSEKI_VERSION}.jar /jena-fuseki/jena-fuseki-geosparql.jar
 
 ENV GOSU_VERSION 1.10
 RUN set -x \
@@ -56,10 +58,10 @@ RUN echo "Apache Jena Fuseki Version ${FUSEKI_VERSION}"> /jena-version
 # Config and data volume
 # The volume needs to be set after the directory has been created to avoid
 # permissions issues
-VOLUME /data/fuseki/fuseki_DB
-ENV FUSEKI_BASE /data/fuseki
-COPY ./data/geosparql_test.rdf /jena-fuseki
-COPY ./docker-entrypoint.sh /jena-fuseki
+#VOLUME /data/fuseki/fuseki_DB
+#ENV FUSEKI_BASE /data/fuseki
+COPY data/geosparql_test.rdf /jena-fuseki
+COPY docker-entrypoint.sh /jena-fuseki
 
 EXPOSE 3030
 

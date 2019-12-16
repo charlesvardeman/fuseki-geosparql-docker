@@ -46,5 +46,5 @@ if [ -n "${INDEX}" ]; then
 fi
 
 
-
-java -jar jena-fuseki-geosparql-3.14.0-SNAPSHOT.jar -rf "${FNAME}" ${CMDOPTS}
+cat /jena-version
+java -jar jena-fuseki-geosparql.jar -rf "${FNAME}" ${CMDOPTS}
