@@ -22,11 +22,13 @@ To remove the intermediate build images:
 docker image prune --filter label=stage=builder
 ```
 
+Prebuilt containers for the Jena github master snapshot (cvardman/fuseki-geosparql:latest) and Jena releases (for example cvardman/fuseki-geosparql:jena-3.13.1) are available in [dockerhub](https://hub.docker.com/r/cvardman/fuseki-geosparql).
 
 ## Running GeoSPARQL Fuseki
 The docker image is provisioned by default with the test [GeoSPARQL dataset](https://github.com/galbiston/geosparql-fuseki/blob/master/geosparql_test.rdf) which is loaded by default when the container starts.
 
 ## Command Line Arguments
+Command line arguments are set via environment variables in the "docker-entrypoint.sh" script. See this script for the latest options.
 
 Boolean options that have false defaults only require "--option" to make true in release v1.0.7 or later.
 Release v1.0.6 and earlier use the form "--option true".
@@ -34,6 +36,7 @@ Release v1.0.6 and earlier use the form "--option true".
 ### 1) Port
 ```
 --port, -p
+env PORT=(port number)
 ```
 
 The port number of the server. Default: 3030
