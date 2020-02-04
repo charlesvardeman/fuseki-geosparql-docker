@@ -4,7 +4,7 @@ CMDOPTS=""
 FNAME=""
 
 if [ -n "${PORT}" ]; then
-	CMDOPTS+=$PORT
+	CMDOPTS=$PORT
 fi
 
 if [ -n "${FILENAME}" ]; then
@@ -14,35 +14,35 @@ else
 fi
 
 if [ -n "${INF}" ]; then
-    CMDOPTS+=" -i "
+    CMDOPTS="${CMDOPTS} -i "
 fi
 
 if [ -n "${UPDATE}" ]; then
-    CMDOPTS+=" --update "
+    CMDOPTS="${CMDOPTS} --update "
 fi
 
 if [ -n "${LOOPBACK}" ]; then
-    CMDOPTS+=" --loopback false "
+    CMDOPTS="${CMDOPTS} --loopback false "
 fi
 
 if [ -n "${DEFGEO}" ]; then
-    CMDOPTS+=" --default_geometry "
+    CMDOPTS="${CMDOPTS} --default_geometry "
 fi
 
 if [ -n "${VALGEO}" ]; then
-    CMDOPTS+=" --validate "
+    CMDOPTS="${CMDOPTS} --validate "
 fi
 
 if [ -n "${REWRITE}" ]; then
-    CMDOPTS+=" --rewrite "
+    CMDOPTS="${CMDOPTS} --rewrite "
 fi
 
 if [ -n "${REMGEO}" ]; then
-    CMDOPTS+=" --remove_geo "
+    CMDOPTS="${CMDOPTS} --remove_geo "
 fi
 
 if [ -n "${INDEX}" ]; then
-    CMDOPTS+=" --index "
+    CMDOPTS="${CMDOPTS} --index "
 fi
 
 
